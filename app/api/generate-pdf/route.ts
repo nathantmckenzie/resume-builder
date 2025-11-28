@@ -4,21 +4,26 @@ import puppeteer from "puppeteer-core";
 import chromium from "@sparticuz/chromium";
 import type { Browser } from "puppeteer-core";
 
-export const runtime = "nodejs"; // required for Puppeteer in Vercel
+// Ensure serverless Node runtime
+export const runtime = "nodejs";
 
-export async function getBrowser(): Promise<Browser> {
+// 🔹 Use a hosted tarball for production
+chromium.packed =
+  "https://github.com/Sparticuz/chromium/releases/download/v121.0.0/chromium-v121.0.0-pack.tar";
+
+async function getBrowser(): Promise<Browser> {
   try {
     if (process.env.NODE_ENV === "development") {
-      // Local dev: use full Puppeteer with bundled Chromium
+      // Local dev: use full Puppeteer
       const fullPuppeteer = await import("puppeteer");
-      console.log("Launching local Puppeteer...");
+      console.log("[PDF] Launching local Puppeteer...");
       const browser = await fullPuppeteer.launch({ headless: true });
-      console.log("Local Puppeteer launched successfully");
+      console.log("[PDF] Local Puppeteer launched");
       return browser;
     } else {
-      // Production (Vercel serverless): use serverless Chromium
+      // Production (Vercel serverless)
       const executablePath = await chromium.executablePath();
-      console.log("Chromium executable path:", executablePath);
+      console.log("[PDF] Chromium executable path:", executablePath);
 
       const browser = await puppeteer.launch({
         args: chromium.args.concat(["--no-sandbox", "--disable-setuid-sandbox"]),
@@ -26,12 +31,12 @@ export async function getBrowser(): Promise<Browser> {
         headless: chromium.headless,
       });
 
-      console.log("Serverless Puppeteer launched successfully");
+      console.log("[PDF] Serverless Puppeteer launched");
       return browser;
     }
   } catch (err) {
-    console.error("Failed to launch Puppeteer:", err);
-    throw err; // propagate error so API route can return 500
+    console.error("[PDF] Failed to launch Puppeteer:", err);
+    throw err;
   }
 }
 
@@ -39,26 +44,24 @@ export async function POST(req: NextRequest) {
   try {
     const { htmlContent } = await req.json();
     if (!htmlContent) {
+      console.error("[PDF] Missing HTML content");
       return NextResponse.json({ error: "Missing HTML" }, { status: 400 });
     }
-
-    console.log("Node ENV:", process.env.NODE_ENV);
-    console.log("Chromium path:", await chromium.executablePath());
 
     const browser = await getBrowser();
     const page = await browser.newPage();
 
-    // Set HTML content
+    console.log("[PDF] Setting page content...");
     await page.setContent(htmlContent, { waitUntil: "networkidle0" });
 
-    // Generate PDF
+    console.log("[PDF] Generating PDF...");
     const pdfBuffer = await page.pdf({
       format: "letter",
       printBackground: true,
-      // margin: { top: 40, bottom: 40, left: 40, right: 40 },
     });
 
     await browser.close();
+    console.log("[PDF] PDF generation completed, sending response...");
 
     return new NextResponse(pdfBuffer, {
       status: 200,
@@ -68,7 +71,7 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (err) {
-    console.error(err);
+    console.error("[PDF] PDF generation failed:", err);
     return NextResponse.json({ error: "PDF generation failed" }, { status: 500 });
   }
 }
