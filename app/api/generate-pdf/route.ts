@@ -6,19 +6,32 @@ import type { Browser } from "puppeteer-core";
 
 export const runtime = "nodejs"; // required for Puppeteer in Vercel
 
-// Helper to get the correct Puppeteer browser
-async function getBrowser(): Promise<Browser> {
-  if (process.env.NODE_ENV === "development") {
-    // Local dev: use full puppeteer with bundled Chromium
-    const fullPuppeteer = await import("puppeteer");
-    return await fullPuppeteer.launch({ headless: true });
-  } else {
-    // Production (Vercel serverless): use serverless Chromium
-    return await puppeteer.launch({
-      args: chromium.args,
-      executablePath: await chromium.executablePath(),
-      headless: chromium.headless,
-    });
+export async function getBrowser(): Promise<Browser> {
+  try {
+    if (process.env.NODE_ENV === "development") {
+      // Local dev: use full Puppeteer with bundled Chromium
+      const fullPuppeteer = await import("puppeteer");
+      console.log("Launching local Puppeteer...");
+      const browser = await fullPuppeteer.launch({ headless: true });
+      console.log("Local Puppeteer launched successfully");
+      return browser;
+    } else {
+      // Production (Vercel serverless): use serverless Chromium
+      const executablePath = await chromium.executablePath();
+      console.log("Chromium executable path:", executablePath);
+
+      const browser = await puppeteer.launch({
+        args: chromium.args.concat(["--no-sandbox", "--disable-setuid-sandbox"]),
+        executablePath,
+        headless: chromium.headless,
+      });
+
+      console.log("Serverless Puppeteer launched successfully");
+      return browser;
+    }
+  } catch (err) {
+    console.error("Failed to launch Puppeteer:", err);
+    throw err; // propagate error so API route can return 500
   }
 }
 
