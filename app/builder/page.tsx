@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import ResumePreview from "@/app/components/resume/ResumePreview";
 import PersonalInfoForm from "@/app/components/forms/PersonalInfoForm";
@@ -26,6 +26,20 @@ export default function BuilderPage() {
 
   const DEFAULT_CATEGORIES = ["personal", "experience", "education", "languages"];
   const [categories, setCategories] = useState<string[]>(DEFAULT_CATEGORIES);
+
+  useEffect(() => {
+    async function testAPI() {
+      try {
+        const res = await fetch("/api/test");
+        const data = await res.json();
+        console.log("API response:", data);
+      } catch (err) {
+        console.error("API fetch error:", err);
+      }
+    }
+
+    testAPI();
+  }, []);
 
   // const [isModalOpen, setIsModalOpen] = useState(false);
 

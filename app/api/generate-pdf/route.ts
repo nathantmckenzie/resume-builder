@@ -1,11 +1,11 @@
+// Ensure serverless Node runtime
+export const runtime = "nodejs";
+
 // app/api/generate-pdf/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import puppeteer from "puppeteer-core";
 import chromium from "@sparticuz/chromium";
 import type { Browser } from "puppeteer-core";
-
-// Ensure serverless Node runtime
-export const runtime = "nodejs";
 
 // 🔹 Use a hosted tarball for production
 chromium.packed =
