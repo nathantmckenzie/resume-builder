@@ -37,11 +37,14 @@ export const downloadPDF = async (
   `;
 
   try {
-    const response = await fetch("/api/generate-pdf", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ htmlContent }),
-    });
+    const response = await fetch(
+      "https://resume-pdf-server-production.up.railway.app/generate-pdf",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ htmlContent }),
+      }
+    );
 
     if (!response.ok) throw new Error("PDF generation failed");
 
