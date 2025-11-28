@@ -29,6 +29,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing HTML" }, { status: 400 });
     }
 
+    console.log("Node ENV:", process.env.NODE_ENV);
+    console.log("Chromium path:", await chromium.executablePath());
+
     const browser = await getBrowser();
     const page = await browser.newPage();
 
