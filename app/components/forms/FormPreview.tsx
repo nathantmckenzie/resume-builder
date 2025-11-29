@@ -211,18 +211,29 @@ export default function FormPreview({
                           openEntry(item, idx);
                         }}
                       >
-                        {(displayFields[type] || []).map((key) => {
-                          const val = item[key];
-                          if (!val) return null;
-                          return (
-                            <div
-                              key={key}
-                              className="capitalize font-semibold mr-3 truncate"
-                            >
-                              {Array.isArray(val) ? val.join(", ") : String(val)}
-                            </div>
+                        {(() => {
+                          const keys = displayFields[type] || [];
+                          const existingValues = keys
+                            .map((key) => {
+                              const val = item[key];
+                              if (!val) return null;
+                              return (
+                                <div
+                                  key={key}
+                                  className="capitalize font-semibold mr-3 truncate"
+                                >
+                                  {Array.isArray(val) ? val.join(", ") : String(val)}
+                                </div>
+                              );
+                            })
+                            .filter(Boolean);
+
+                          return existingValues.length > 0 ? (
+                            existingValues
+                          ) : (
+                            <div>Edit Entry</div>
                           );
-                        })}
+                        })()}
                       </div>
                     </SortableItem>
                   ))}

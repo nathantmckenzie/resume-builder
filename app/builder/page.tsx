@@ -27,20 +27,6 @@ export default function BuilderPage() {
   const DEFAULT_CATEGORIES = ["personal", "experience", "education", "languages"];
   const [categories, setCategories] = useState<string[]>(DEFAULT_CATEGORIES);
 
-  useEffect(() => {
-    async function testAPI() {
-      try {
-        const res = await fetch("/api/test");
-        const data = await res.json();
-        console.log("API response:", data);
-      } catch (err) {
-        console.error("API fetch error:", err);
-      }
-    }
-
-    testAPI();
-  }, []);
-
   // const [isModalOpen, setIsModalOpen] = useState(false);
 
   // const addCategory = (name: string) => {
@@ -96,7 +82,7 @@ export default function BuilderPage() {
       <div className="fixed top-0 bg-white h-[70px] w-full flex justify-end items-center shadow">
         <button
           onClick={() => downloadPDF(hiddenPagesRef, FULL_WIDTH, FULL_HEIGHT)}
-          className="bg-[#2563eb] text-[#ffffff] px-4 py-2 rounded shadow mr-5"
+          className="bg-[#2563eb] text-[#ffffff] px-4 py-2 rounded shadow mr-5 cursor-pointer"
         >
           Download PDF
         </button>

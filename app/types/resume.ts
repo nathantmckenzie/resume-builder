@@ -7,6 +7,10 @@ export interface PersonalInfo {
   phone: string;
   location: string;
   summary: string;
+  photo: {
+    file: string | null;
+    previewUrl: string | null;
+  };
 }
 
 export interface Experience {

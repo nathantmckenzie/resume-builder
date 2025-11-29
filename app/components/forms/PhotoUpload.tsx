@@ -5,19 +5,39 @@ import Image from "next/image";
 import { Camera } from "lucide-react";
 import { useResumeStore } from "@/app/store/store";
 
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+  });
+}
+
 export default function PhotoUploadCircle() {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { photo, setPhoto } = useResumeStore();
+  const { resume, update } = useResumeStore();
 
-  const handleClick = () => fileInputRef.current?.click();
+  const handleClick = () => {
+    console.log("file input ref", fileInputRef);
+    fileInputRef.current?.click();
+  };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    setPhoto({
-      file,
-      previewUrl: URL.createObjectURL(file),
+    const base64 = await fileToBase64(file);
+
+    update({
+      personal: {
+        ...resume.personal,
+        photo: {
+          file,
+          previewUrl: URL.createObjectURL(file),
+          // previewUrl: URL.createObjectURL(file),
+        },
+      },
     });
   };
 
@@ -27,9 +47,9 @@ export default function PhotoUploadCircle() {
         onClick={handleClick}
         className="w-[200px] h-[200px] rounded-full bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden cursor-pointer hover:bg-gray-200 transition relative"
       >
-        {photo.previewUrl ? (
+        {resume.personal.photo.previewUrl ? (
           <Image
-            src={photo.previewUrl}
+            src={resume.personal.photo.previewUrl}
             alt="Uploaded photo"
             fill
             className="object-cover"
@@ -43,7 +63,17 @@ export default function PhotoUploadCircle() {
         type="file"
         accept="image/*"
         ref={fileInputRef}
-        className="hidden"
+        style={{
+          position: "absolute",
+          width: 1,
+          height: 1,
+          padding: 0,
+          margin: -1,
+          overflow: "hidden",
+          clip: "rect(0, 0, 0, 0)",
+          whiteSpace: "nowrap",
+          border: 0,
+        }}
         onChange={handleFileChange}
       />
     </div>

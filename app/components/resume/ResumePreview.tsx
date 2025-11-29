@@ -10,11 +10,11 @@ const FULL_WIDTH = 850;
 const FULL_HEIGHT = 1100;
 const GAP = 24;
 
-const PAGE_MARGIN_TOP = 40;
-const PAGE_MARGIN_BOTTOM = 40;
+const PAGE_MARGIN_TOP = 50;
+const PAGE_MARGIN_BOTTOM = 60;
 const PAGE_USABLE_HEIGHT = FULL_HEIGHT - PAGE_MARGIN_TOP - PAGE_MARGIN_BOTTOM;
 
-const PAGE_PADDING = 40;
+const PAGE_PADDING = 50;
 const CONTENT_WIDTH = FULL_WIDTH - PAGE_PADDING * 2;
 
 type RenderLine = {
@@ -28,18 +28,6 @@ type RenderLine = {
   marginBottom?: number;
   noBreak?: boolean;
 };
-
-function mapResumeToForm(resume: ResumeData): FormType {
-  return {
-    name: resume.personal.fullName,
-    title: resume.personal.title,
-    summary: resume.personal.summary,
-    experience: resume.experience,
-    education: resume.education,
-    skills: resume.skills,
-    languages: resume.languages,
-  };
-}
 
 export default function ResumeEditor({ hiddenPagesRef }) {
   const { resume } = useResumeStore();
@@ -61,8 +49,7 @@ export default function ResumeEditor({ hiddenPagesRef }) {
 
   // Recompute pages every time resume store changes
   useEffect(() => {
-    const form = mapResumeToForm(resume);
-    const pages = paginateForm(form, CONTENT_WIDTH, PAGE_USABLE_HEIGHT);
+    const pages = paginateForm(resume, CONTENT_WIDTH, PAGE_USABLE_HEIGHT);
     setPagesData(pages);
   }, [resume]);
 
@@ -133,6 +120,7 @@ function PreviewPage({ lines }: { lines: RenderLine[] }) {
           paddingTop: PAGE_MARGIN_TOP,
           paddingBottom: PAGE_MARGIN_BOTTOM,
           fontFamily: "sans-serif", // || resume?.settings?.fontFamily ||
+          whiteSpace: "pre-wrap",
         }}
       >
         <RenderLines lines={lines} />

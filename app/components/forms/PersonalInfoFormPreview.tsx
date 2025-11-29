@@ -5,7 +5,7 @@ import { useResumeStore } from "@/app/store/store";
 import { Camera } from "lucide-react";
 
 export default function PersonalInfoFormPreview({ setCurrentView }) {
-  const { resume, photo, setPhoto } = useResumeStore();
+  const { resume } = useResumeStore();
 
   return (
     <div
@@ -26,11 +26,11 @@ export default function PersonalInfoFormPreview({ setCurrentView }) {
           {resume.personal.title.length ? resume.personal.title : "Title"}
         </div>
       </div>
-      {photo.previewUrl ? (
+      {resume.personal.photo.previewUrl ? (
         <div className="w-[130px] h-[130px] rounded-full bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden cursor-pointer hover:bg-gray-200 transition relative">
           <Image
             alt="Uploaded photo"
-            src={photo.previewUrl}
+            src={resume.personal.photo.previewUrl}
             className="object-cover"
             width={130}
             height={130}
