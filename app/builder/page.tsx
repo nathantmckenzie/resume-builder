@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 
 import ResumePreview from "@/app/components/resume/ResumePreview";
 import PersonalInfoForm from "@/app/components/forms/PersonalInfoForm";
@@ -17,7 +17,6 @@ type View = "preview" | Section;
 
 export default function BuilderPage() {
   const [currentView, setCurrentView] = useState<View>("preview");
-  const [currentEntry, setCurrentEntry] = useState(null);
   const [currentIndex, setCurrentIndex] = useState<number | null>(null);
 
   const hiddenPagesRef = useRef<HTMLDivElement | null>(null);
@@ -56,7 +55,6 @@ export default function BuilderPage() {
         <FormPreview
           type={category}
           setCurrentView={setCurrentView}
-          setCurrentEntry={setCurrentEntry}
           setCurrentIndex={setCurrentIndex}
         />
       ),
@@ -88,7 +86,10 @@ export default function BuilderPage() {
         </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 h-screen pt-[70px]">
-        <div className="p-6 overflow-y-scroll hide-scrollbar">
+        <div
+          className="p-6 overflow-y-scroll hide-scrollbar"
+          style={{ paddingBottom: currentView === "preview" ? "1.5rem" : 0 }}
+        >
           {currentView === "preview"
             ? previews.map((preview) => <div key={preview.id}>{preview.component}</div>)
             : forms[currentView] ?? (

@@ -60,12 +60,10 @@ type ResumeSection = keyof ResumeData;
 export default function FormPreview({
   type,
   setCurrentView,
-  setCurrentEntry,
   setCurrentIndex,
 }: {
   type: string;
   setCurrentView: (v: string) => void;
-  setCurrentEntry: (e: string) => void;
   setCurrentIndex: (i: number) => void;
 }) {
   const { resume, update } = useResumeStore();
@@ -151,7 +149,6 @@ export default function FormPreview({
 
   const openEntry = (entry: any, index: number) => {
     setCurrentView(type);
-    setCurrentEntry(entry);
     setCurrentIndex(index);
   };
 
@@ -162,7 +159,6 @@ export default function FormPreview({
     const newEntry = { ...template, id: newId() };
     update({ [typeStr]: [...(resume[typeStr] || []), newEntry] });
     setCurrentView(typeStr);
-    setCurrentEntry(newEntry);
     setCurrentIndex(resume[typeStr]?.length ?? 0);
   };
 

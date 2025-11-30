@@ -122,7 +122,7 @@ export default function ExperienceForm({
           }}
         />
       </div>
-      <div className="sticky bottom-0 bg-white rounded-2xl mt-5 h-[100px] flex justify-center items-center border border-gray-300">
+      <div className="sticky bottom-0 bg-white rounded-2xl h-[100px] flex justify-center items-center border border-gray-300">
         <button
           className="cursor-pointer bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-xl w-[280px] h-[60px] text-white font-bold"
           onClick={() => setCurrentView("preview")}

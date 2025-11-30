@@ -24,31 +24,34 @@ export const useResumeStore = create<{
       },
     },
     experience: [
-      {
-        company: "",
-        role: "",
-        startDate: "",
-        endDate: "",
-        description: "",
-        location: "",
-      },
+      // {
+      //   company: "",
+      //   role: "",
+      //   startDate: "",
+      //   endDate: "",
+      //   description: "",
+      //   location: "",
+      // },
     ],
     education: [
-      {
-        startDate: "",
-        endDate: "",
-        school: "",
-        degree: "",
-        location: "",
-        description: "",
-      },
+      // {
+      //   startDate: "",
+      //   endDate: "",
+      //   school: "",
+      //   degree: "",
+      //   location: "",
+      //   description: "",
+      // },
     ],
     skills: [],
     summary: "",
     selectedCategories: ["education", "experience", "skills", "languages"],
-    languages: [{ language: "", level: "" }],
+    languages: [
+      // { language: "", level: "" }
+    ],
     settings: {
       fontSize: 16,
+      backgroundColor: "white",
     },
   },
 

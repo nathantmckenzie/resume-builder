@@ -47,6 +47,8 @@ export default function RenderLines({ lines }: { lines: RenderLine[] }) {
                 alignItems: "center",
                 gap: 24,
                 marginBottom: ln.marginBottom ?? 20,
+                // backgroundColor:
+                //   ln.kind === "photoHeaderGroup" ? "rgba(0,0,0,0.05)" : undefined,
               }}
             >
               <img
