@@ -19,7 +19,6 @@ export default function PhotoUploadCircle() {
   const { resume, update } = useResumeStore();
 
   const handleClick = () => {
-    console.log("file input ref", fileInputRef);
     fileInputRef.current?.click();
   };
 

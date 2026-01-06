@@ -317,8 +317,6 @@ export function paginateForm(
     usedHeight = 0;
   };
 
-  console.log("LINES", lines);
-
   lines.forEach((ln) => {
     const mt = ln.marginTop ?? 0;
     const mb = ln.marginBottom ?? 0;
